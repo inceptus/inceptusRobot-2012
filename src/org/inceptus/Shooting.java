@@ -13,9 +13,9 @@ import java.lang.Math;
  */
 public class Shooting {
     //Calculate the RPMs from either angle 45 or 60.
-    public static int calculateRPMs(int distance, boolean angle60, int hoop){
+    public static int calculateRPMs(int distance, double angle, int hoop){
         //Calculate height
-        int height;
+        int height = 0;
         //Switch for hoop
         switch(hoop){
             case 1:
@@ -30,12 +30,9 @@ public class Shooting {
                 height = 91;
                 break;
         }
-        //If the angle is 60 degrees
-        if(angle60){
-            return distance*height;
-        }else{
-            return distance*height;
-        }
+        double angleRads = angle * Math.PI/180;
+        double velocity = (distance - 9)/(Math.sqrt((46 - height+(distance - 9)*Math.tan(angleRads))/16.087) * cos(angleRads));
+        return velocity;
     }
     //Shoot
     public static void shoot(int RPMs){
