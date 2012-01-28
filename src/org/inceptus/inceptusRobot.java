@@ -69,10 +69,11 @@ public class inceptusRobot extends IterativeRobot {
     }
 
     /**
-     * This function is called periodically during autonomous
+     * This function is called once during autonomous
      */
-    public void autonomousPeriodic() {
-
+    public void autonomousInit() {
+        //Shoot from 12 feet at 60 degrees
+        Shooting.shoot(Shooting.calculateRPMs(12, true));
     }
 
     /**
