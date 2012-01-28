@@ -13,7 +13,7 @@ import java.lang.Math;
  */
 public class Shooting {
     //Calculate the RPMs from either angle 45 or 60.
-    public static int calculateRPMs(int distance, double angle, int hoop, double wheelDiameter){
+    public static double calculateRPMs(int distance, double angle, int hoop, double wheelDiameter){
         //Calculate height
         int height = 0;
         //Switch for hoop
@@ -36,7 +36,9 @@ public class Shooting {
         return RPM;
     }
     //Shoot
-    public static void shoot(int RPMs){
+    public static void shoot(double RPMs, int maxRPMs){
         //Ramp up to rpm
+        double power = RPMs * 11 / 3 / maxRPMs;
+        shootingWheel.set(power);
     }
 }
