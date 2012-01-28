@@ -29,4 +29,5 @@ public class Constants {
     public final static double magnitudeMax = .7;
     //Shooting wheel
     public final static double wheelDiameter = 1;
+    public final static int maxRPMs = 16000;
 }
