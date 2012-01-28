@@ -27,4 +27,6 @@ public class Constants {
     //Scale the magnitude
     public final static double magnitudeMin = .2;
     public final static double magnitudeMax = .7;
+    //Shooting wheel
+    public final static double wheelDiameter = 1;
 }
