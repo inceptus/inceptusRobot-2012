@@ -7,8 +7,6 @@
 
 package org.inceptus;
 
-
-import edu.wpi.first.wpilibj.Accelerometer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Joystick;
