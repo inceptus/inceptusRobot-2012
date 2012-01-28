@@ -73,7 +73,7 @@ public class inceptusRobot extends IterativeRobot {
      */
     public void autonomousInit() {
         //Shoot from 12 feet at 60 degrees
-        Shooting.shoot(Shooting.calculateRPMs(12, true, 4));
+        Shooting.shoot(Shooting.calculateRPMs(12, true, 4, Constants.wheelDiameter), Constants.maxRPMs);
     }
 
     /**
