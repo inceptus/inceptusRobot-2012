@@ -29,17 +29,14 @@ public class inceptusRobot extends IterativeRobot {
     private Joystick armJoy;
     
     //Init the conveyor motors
-    //private Jaguar lowerConveyorDrive;
-    //private Jaguar upperConveyorDrive;
+    private Jaguar lowerConveyorDrive;
+    private Jaguar upperConveyorDrive;
     
     //Init the shooting motor
-    //private Jaguar shootingWheelDrive;
+    private Jaguar shootingWheelDrive;
     
     //Setup the mecanum drive
     private RobotDrive drive;
-   
-    //Setup the toggle for the lower conveyor
-    //boolean lowerConveyorDirection;
 
     /**
      * This function is run when the robot is first started up and should be
@@ -51,10 +48,10 @@ public class inceptusRobot extends IterativeRobot {
         //Setup the arm joystick
         armJoy = new Joystick(Constants.armJoyPort); 
         //Setup the Conveyor motors
-        //lowerConveyorDrive = new Jaguar(Constants.lowerConveyorDrivePort);
-        //upperConveyorDrive = new Jaguar(Constants.upperConveyorDrivePort);
+        lowerConveyorDrive = new Jaguar(Constants.lowerConveyorDrivePort);
+        upperConveyorDrive = new Jaguar(Constants.upperConveyorDrivePort);
         //Setup the shooting motor
-        //shootingWheelDrive = new Jaguar(Constants.shootingWheelDrivePort);
+        shootingWheelDrive = new Jaguar(Constants.shootingWheelDrivePort);
         //Setup the drive
         drive = new RobotDrive(Constants.leftFrontDrivePort, Constants.leftRearDrivePort, Constants.rightFrontDrivePort, Constants.rightRearDrivePort);
         //Invert the motor
@@ -103,18 +100,11 @@ public class inceptusRobot extends IterativeRobot {
      
         //Scale the magnitude down to not overpower the motors
         T = Constants.magnitudeMin + (T * (Constants.magnitudeMax - Constants.magnitudeMin));
-        
-        //T = .7;
 
         //Use the throttle value to normalize the magnitude
         magnitude = magnitude * (1-T);
         
         //Drive mecanum using polar coordinates
         drive.mecanumDrive_Polar(magnitude, vector, rotation);
-
-        //Get buttons for driving
-        /*if(armJoy.getRawButton(3) == true){
-            
-        }*/
     }
 }
