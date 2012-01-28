@@ -13,7 +13,7 @@ import java.lang.Math;
  */
 public class Shooting {
     //Calculate the RPMs from either angle 45 or 60.
-    public int calculateRPMs(int distance, boolean angle60){
+    public static int calculateRPMs(int distance, boolean angle60){
         //If the angle is 60 degrees
         if(angle60){
             return distance;
@@ -22,7 +22,7 @@ public class Shooting {
         }
     }
     //Shoot
-    public void shoot(int RPMs){
+    public static void shoot(int RPMs){
         //Ramp up to rpm
     }
 }
