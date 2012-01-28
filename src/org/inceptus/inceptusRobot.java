@@ -8,11 +8,12 @@
 package org.inceptus;
 
 
+import edu.wpi.first.wpilibj.Accelerometer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
-import org.inceptus.Constants;
+import edu.wpi.first.wpilibj.RobotDrive.MotorType;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -27,22 +28,19 @@ public class inceptusRobot extends IterativeRobot {
     //Init the arm Joystick
     private Joystick armJoy;
     
-    //Init the drive motors
-    private Jaguar rearLeftDrive;
-    private Jaguar frontLeftDrive;
-    private Jaguar rearRightDrive;
-    private Jaguar frontRightDrive;
-    
     //Init the conveyor motors
-    private Jaguar lowerConveyorDrive;
-    private Jaguar upperConveyorDrive;
+    //private Jaguar lowerConveyorDrive;
+    //private Jaguar upperConveyorDrive;
     
     //Init the shooting motor
-    private Jaguar shootingWheelDrive;
+    //private Jaguar shootingWheelDrive;
     
     //Setup the mecanum drive
     private RobotDrive drive;
-    
+   
+    //Setup the toggle for the lower conveyor
+    //boolean lowerConveyorDirection;
+
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
@@ -52,18 +50,22 @@ public class inceptusRobot extends IterativeRobot {
         driveJoy = new Joystick(Constants.driveJoyPort);
         //Setup the arm joystick
         armJoy = new Joystick(Constants.armJoyPort); 
-        //Setup the drive motors
-        rearLeftDrive = new Jaguar(Constants.leftRearDrivePort);
-        rearRightDrive = new Jaguar(Constants.rightRearDrivePort);
-        frontLeftDrive = new Jaguar(Constants.leftFrontDrivePort);
-        frontRightDrive = new Jaguar(Constants.rightFrontDrivePort);
         //Setup the Conveyor motors
-        lowerConveyorDrive = new Jaguar(Constants.lowerConveyorDrivePort);
-        upperConveyorDrive = new Jaguar(Constants.upperConveyorDrivePort);
+        //lowerConveyorDrive = new Jaguar(Constants.lowerConveyorDrivePort);
+        //upperConveyorDrive = new Jaguar(Constants.upperConveyorDrivePort);
         //Setup the shooting motor
-        shootingWheelDrive = new Jaguar(Constants.shootingWheelDrivePort);
+        //shootingWheelDrive = new Jaguar(Constants.shootingWheelDrivePort);
         //Setup the drive
-        drive = new RobotDrive(rearLeftDrive, frontLeftDrive, rearRightDrive, frontRightDrive);
+        drive = new RobotDrive(Constants.leftFrontDrivePort, Constants.leftRearDrivePort, Constants.rightFrontDrivePort, Constants.rightRearDrivePort);
+        //Invert the motor
+        drive.setInvertedMotor(MotorType.kFrontLeft, true);
+        drive.setInvertedMotor(MotorType.kRearRight, false);
+        drive.setInvertedMotor(MotorType.kFrontLeft, true);
+        drive.setInvertedMotor(MotorType.kRearLeft, true);
+
+
+        //Stop by default
+        //lowerConveyorDirection = true;
     }
 
     /**
@@ -91,7 +93,7 @@ public class inceptusRobot extends IterativeRobot {
         //Get the rotation
         vector = driveJoy.getDirectionDegrees();
         //Set the vector to the twist from the Joystick
-        rotation = Z;
+        rotation = Z * -.4;
         
         //Check and use the thresholds
         magnitude = (Math.abs(magnitude) < Constants.magnitudeThreshold) ? 0 : magnitude;
@@ -100,16 +102,19 @@ public class inceptusRobot extends IterativeRobot {
         T = ((T+1)/2);
      
         //Scale the magnitude down to not overpower the motors
-        T = Constants.magnitudeMin + (T * (Constants.magnitudeMax - Constants.magnitudeMin));  
+        T = Constants.magnitudeMin + (T * (Constants.magnitudeMax - Constants.magnitudeMin));
         
+        //T = .7;
+
         //Use the throttle value to normalize the magnitude
         magnitude = magnitude * (1-T);
         
-        
         //Drive mecanum using polar coordinates
         drive.mecanumDrive_Polar(magnitude, vector, rotation);
-        
-        //Init the arm values
+
+        //Get buttons for driving
+        /*if(armJoy.getRawButton(3) == true){
+            
+        }*/
     }
-    
 }
