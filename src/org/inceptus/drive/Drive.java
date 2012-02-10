@@ -2,6 +2,7 @@ package org.inceptus.drive;
 
 import edu.wpi.first.wpilibj.CANJaguar;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.RobotDrive.MotorType;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
 import org.inceptus.debug.Debug;
 
@@ -31,6 +32,12 @@ public class Drive {
 
             //Setup the Drive
             robotDrive = new RobotDrive(leftFront, leftRear, rightFront, rightRear);
+
+            //Invert the motors
+            robotDrive.setInvertedMotor(MotorType.kFrontLeft, true);
+            robotDrive.setInvertedMotor(MotorType.kRearRight, false);
+            robotDrive.setInvertedMotor(MotorType.kFrontLeft, true);
+            robotDrive.setInvertedMotor(MotorType.kRearLeft, true);
 
         } catch (CANTimeoutException ex) { //Catch CANTimeout Error
 
