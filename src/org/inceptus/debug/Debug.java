@@ -1,6 +1,10 @@
 package org.inceptus.debug;
 
 import edu.wpi.first.wpilibj.DriverStationLCD;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.image.BinaryImage;
+import edu.wpi.first.wpilibj.image.ColorImage;
+import edu.wpi.first.wpilibj.image.NIVisionException;
 
 /**
  *
@@ -27,5 +31,15 @@ public class Debug {
         //Send message to driverstation
         DriverStationLCD.getInstance().println( DriverStationLCD.Line.kUser2, 1,
                 "Log:" + msg );
+    }
+    
+    public static void logImage(ColorImage im) throws NIVisionException{
+        //Save to file
+        im.write("inceptus-"+Timer.getFPGATimestamp()+".jpg");
+    }
+
+    public static void logImage(BinaryImage im) throws NIVisionException {
+        //Save to file
+        im.write("inceptus-"+Timer.getFPGATimestamp()+".jpg");
     }
 }

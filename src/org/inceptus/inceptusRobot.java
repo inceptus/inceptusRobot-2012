@@ -12,6 +12,7 @@ import org.inceptus.OI.OI;
 import org.inceptus.chassis.Drive;
 import org.inceptus.chassis.LowerConveyor;
 import org.inceptus.chassis.Ramp;
+import org.inceptus.camera.TargetFinder;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -30,6 +31,9 @@ public class inceptusRobot extends IterativeRobot {
     //Global lowerConveyor class
     private LowerConveyor lowerConveyor;
    
+    //Global camera class
+    private TargetFinder targetfinder;
+    
     //Global Operator Interface class
     private OI oi;
 
@@ -40,6 +44,9 @@ public class inceptusRobot extends IterativeRobot {
     public void robotInit() {
         
         //TODO: Catch false error returns and handle
+        
+        //Get the target finder class
+        targetfinder = new TargetFinder();
         
         //Get the drive class
         drive = new Drive();
@@ -60,13 +67,16 @@ public class inceptusRobot extends IterativeRobot {
         oi = new OI();
         //Init the OI
         oi.init();
+        
+        
     }
 
     /**
      * This function is called once during autonomous
      */
     public void autonomousInit() {
-        
+        //Process the camera image
+        boolean processImage = targetfinder.processImage();
     }
 
     /**
