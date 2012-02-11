@@ -8,10 +8,10 @@
 package org.inceptus;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Jaguar;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.RobotDrive;
-import edu.wpi.first.wpilibj.RobotDrive.MotorType;
+import org.inceptus.OI.OI;
+import org.inceptus.chassis.Drive;
+import org.inceptus.chassis.LowerConveyor;
+import org.inceptus.chassis.Ramp;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -21,89 +21,67 @@ import edu.wpi.first.wpilibj.RobotDrive.MotorType;
  * directory.
  */
 public class inceptusRobot extends IterativeRobot {
-    //Init the main joystick
-    private Joystick driveJoy;
-    //Init the arm Joystick
-    private Joystick armJoy;
+    //Global drive class
+    private Drive drive;
     
-    //Init the conveyor motors
-    private Jaguar lowerConveyorDrive;
-    private Jaguar upperConveyorDrive;
+    //Global ramp class
+    private Ramp ramp;
     
-    //Init the shooting motor
-    private Jaguar shootingWheelDrive;
-    
-    //Setup the mecanum drive
-    private RobotDrive drive;
+    //Global lowerConveyor class
+    private LowerConveyor lowerConveyor;
+   
+    //Global Operator Interface class
+    private OI oi;
 
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
     public void robotInit() {
-        //Setup the drive joystick
-        driveJoy = new Joystick(Constants.driveJoyPort);
-        //Setup the arm joystick
-        armJoy = new Joystick(Constants.armJoyPort); 
-        //Setup the Conveyor motors
-        lowerConveyorDrive = new Jaguar(Constants.lowerConveyorDrivePort);
-        upperConveyorDrive = new Jaguar(Constants.upperConveyorDrivePort);
-        //Setup the shooting motor
-        shootingWheelDrive = new Jaguar(Constants.shootingWheelDrivePort);
-        //Setup the drive
-        drive = new RobotDrive(Constants.leftFrontDrivePort, Constants.leftRearDrivePort, Constants.rightFrontDrivePort, Constants.rightRearDrivePort);
-        //Invert the motor
-        drive.setInvertedMotor(MotorType.kFrontLeft, true);
-        drive.setInvertedMotor(MotorType.kRearRight, false);
-        drive.setInvertedMotor(MotorType.kFrontLeft, true);
-        drive.setInvertedMotor(MotorType.kRearLeft, true);
+        
+        //TODO: Catch false error returns and handle
+        
+        //Get the drive class
+        drive = new Drive();
+        //Try to init the drive
+        drive.init();
+        
+        //Get the ramp class
+        ramp = new Ramp();
+        //Try to init the ramp
+        ramp.init();
+        
+        //Get the ramp class
+        lowerConveyor = new LowerConveyor();
+        //Try to init the ramp
+        lowerConveyor.init();
 
-
-        //Stop by default
-        //lowerConveyorDirection = true;
+        //Get the oi class
+        oi = new OI();
+        //Init the OI
+        oi.init();
     }
 
     /**
      * This function is called once during autonomous
      */
     public void autonomousInit() {
-        //Shoot from 12 feet at 60 degrees
-        Shooting.shoot(Shooting.calculateRPMs(12, true));
+        
     }
 
     /**
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
-        //Init joystick values T=Throttle
-        double T, Z;
         
-        //Set the joystick values
-        T = driveJoy.getRawAxis(3);
-        Z = driveJoy.getRawAxis(4);
+        //Drive with the latest Joystick values
+        oi.driveWithJoy(drive);
         
-        //Init the values for each
-        double magnitude, rotation, vector;
-        //Use the distance formula to 
-        magnitude = driveJoy.getMagnitude();
-        //Get the rotation
-        vector = driveJoy.getDirectionDegrees();
-        //Set the vector to the twist from the Joystick
-        rotation = Z * -.4;
+        //Move the LowerConveyor
+        oi.moveLowerConveyor(lowerConveyor);
         
-        //Check and use the thresholds
-        magnitude = (Math.abs(magnitude) < Constants.magnitudeThreshold) ? 0 : magnitude;
+        //Move the ramp using the button values
+        oi.moveRamp(ramp);
         
-        //Adjust to 0-1 range
-        T = ((T+1)/2);
-     
-        //Scale the magnitude down to not overpower the motors
-        T = Constants.magnitudeMin + (T * (Constants.magnitudeMax - Constants.magnitudeMin));
-
-        //Use the throttle value to normalize the magnitude
-        magnitude = magnitude * (1-T);
-        
-        //Drive mecanum using polar coordinates
-        drive.mecanumDrive_Polar(magnitude, vector, rotation);
     }
 }
