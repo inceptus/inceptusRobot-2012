@@ -1,6 +1,8 @@
 package org.inceptus.OI;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
+import org.inceptus.camera.TargetFinder;
 import org.inceptus.chassis.Drive;
 import org.inceptus.chassis.LowerConveyor;
 import org.inceptus.chassis.Ramp;
@@ -14,12 +16,12 @@ import org.inceptus.debug.Debug;
 public class OI {
     //Joysticks
     private InJoystick mainJoy;
-    private InJoystick otherJoy;
+    private Joystick otherJoy;
     
     public boolean init(){
         //Init the joysticks
         mainJoy = new InJoystick(1);
-        otherJoy = new InJoystick(2);
+        otherJoy = new Joystick(2);
         
         //Return Success
         return true;
@@ -49,12 +51,20 @@ public class OI {
         }
     }
     
+    public void updateCamera(TargetFinder targetFinder){
+        //If the process image button is pressed
+        if(otherJoy.getRawButton(10)){
+            //Get a new image
+            targetFinder.processImage();
+        }
+    }
+    
     
     public void moveLowerConveyor(LowerConveyor lowerConveyor){
         
         //Try catch for errors
         try {
-            //If the ramp button is pressed
+            //If the conveyor button is pressed
             if(mainJoy.getRawButton(4)){
                 lowerConveyor.moveDown();
             }else if(mainJoy.getRawButton(3)){
@@ -65,12 +75,12 @@ public class OI {
         } catch (CANTimeoutException ex) { //Catch CANTimeout Error
             
             //Print Error
-            Debug.fatal(ex, "CAN Timeout in lowerConveyor");
+            Debug.fatal(ex, "CAN Timeout in " + this.getClass().getName());
 
         } catch (Exception ex){ //Catch all for errors
 
             //Print Error
-            Debug.fatal(ex, "Unknown error in lowerConveyor");
+            Debug.fatal(ex, "Unknown error in " + this.getClass().getName());
 
         }
     }
