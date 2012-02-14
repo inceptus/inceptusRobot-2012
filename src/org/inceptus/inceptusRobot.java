@@ -7,12 +7,18 @@
 
 package org.inceptus;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Kinect;
 import org.inceptus.OI.OI;
+import org.inceptus.camera.Target;
 import org.inceptus.chassis.Drive;
 import org.inceptus.chassis.LowerConveyor;
 import org.inceptus.chassis.Ramp;
+//import org.inceptus.chassis.UpperShooter;
 import org.inceptus.camera.TargetFinder;
+import org.inceptus.chassis.UpperShooter;
+import org.inceptus.debug.Debug;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -30,9 +36,12 @@ public class inceptusRobot extends IterativeRobot {
     
     //Global lowerConveyor class
     private LowerConveyor lowerConveyor;
+    
+    //Global lowerConveyor class
+    private UpperShooter upperShooter;
    
     //Global camera class
-    private TargetFinder targetfinder;
+    private TargetFinder targetFinder;
     
     //Global Operator Interface class
     private OI oi;
@@ -46,23 +55,25 @@ public class inceptusRobot extends IterativeRobot {
         //TODO: Catch false error returns and handle
         
         //Get the target finder class
-        targetfinder = new TargetFinder();
+        targetFinder = new TargetFinder();
         
         //Get the drive class
         drive = new Drive();
         //Try to init the drive
-        drive.init();
+        //drive.init();
         
         //Get the ramp class
         ramp = new Ramp();
         //Try to init the ramp
-        ramp.init();
+        //ramp.init();
         
         //Get the ramp class
         lowerConveyor = new LowerConveyor();
         //Try to init the ramp
-        lowerConveyor.init();
+        //lowerConveyor.init();
 
+        upperShooter = new UpperShooter();
+        
         //Get the oi class
         oi = new OI();
         //Init the OI
@@ -76,7 +87,13 @@ public class inceptusRobot extends IterativeRobot {
      */
     public void autonomousInit() {
         //Process the camera image
-        boolean processImage = targetfinder.processImage();
+        Target bestTarget = targetFinder.processImage();
+        
+        Debug.log("Distance:" + (bestTarget.distance/12));
+        
+        Debug.log("RPMs:" + upperShooter.inchesToRPMs(bestTarget.distance));
+        
+        Debug.log("Distance From Center:" + ((bestTarget.boxCenterX + bestTarget.rawBboxCornerX) - 160));
     }
 
     /**
@@ -85,13 +102,21 @@ public class inceptusRobot extends IterativeRobot {
     public void teleopPeriodic() {
         
         //Drive with the latest Joystick values
-        oi.driveWithJoy(drive);
+        //oi.driveWithJoy(drive);
         
         //Move the LowerConveyor
-        oi.moveLowerConveyor(lowerConveyor);
+        //oi.moveLowerConveyor(lowerConveyor);
         
         //Move the ramp using the button values
-        oi.moveRamp(ramp);
+        //oi.moveRamp(ramp);
+        
+        oi.updateCamera(targetFinder);
+        
+        
+        
+        /*if(UpperShooter.periodic()){
+            UpperShooter.shoot()
+        }*/
         
     }
 }
