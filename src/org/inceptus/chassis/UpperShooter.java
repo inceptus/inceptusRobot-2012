@@ -16,65 +16,37 @@ public class UpperShooter {
     
     private double targetRPM = 0;
     
-    public UpperShooter(){
-        //Try catch for errors
-        try {
+    public UpperShooter() throws CANTimeoutException{
             
             //Setup the Jaguars
             conveyorMotor = new CANJaguar(14);
             upperShootingMotor = new CANJaguar(15);
             lowerShootingMotor = new CANJaguar(16);
             
-        } catch (CANTimeoutException ex) { //Catch CANTimeout Error
-            
-            //Print Error
-            Debug.fatal(ex, "CAN Timeout in " + this.getClass().getName());
-            
-
-        } catch (Exception ex){ //Catch all for errors
-
-            //Print Error
-            Debug.fatal(ex, "Unknown error in " + this.getClass().getName());
-            
-        }
     }
     
     public void prepareToShoot( int inches ){
         targetRPM = inchesToRPMs(inches);
     }
     
-    public boolean perodic() {
-        try {
-            if(isAtSpeed()){
-                return true;
+    public boolean perodic() throws CANTimeoutException {
+        
+        if(isAtSpeed()){
+            return true;
+        }else{
+            //If at full power
+            if( lowerShootingMotor.getX() == 100 ){
+                //Decrease target RPMs
+                targetRPM -= 100;
+                //Return not ready
+                return false;
             }else{
-                //If at full power
-                if( lowerShootingMotor.getX() == 100 ){
-                    //Decrease target RPMs
-                    targetRPM -= 100;
-                    //Return not ready
-                    return false;
-                }else{
-                    //Speed up the motors
-                    lowerShootingMotor.setX( lowerShootingMotor.getX() + .01 );
-                    upperShootingMotor.setX( upperShootingMotor.getX() + .01 );
-                    //Return not ready
-                    return false;
-                }
+                //Speed up the motors
+                lowerShootingMotor.setX( lowerShootingMotor.getX() + .01 );
+                upperShootingMotor.setX( upperShootingMotor.getX() + .01 );
+                //Return not ready
+                return false;
             }
-        } catch (CANTimeoutException ex) { //Catch CANTimeout Error
-            
-            //Print Error
-            Debug.fatal(ex, "CAN Timeout in " + this.getClass().getName());
-            //Return Failure
-            return false;
-
-        } catch (Exception ex){ //Catch all for errors
-
-            //Print Error
-            Debug.fatal(ex, "Unknown error in " + this.getClass().getName());
-            //Return Failure
-            return false;
         }
                 
     }
