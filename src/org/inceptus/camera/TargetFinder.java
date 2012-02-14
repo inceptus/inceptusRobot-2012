@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj.camera.AxisCamera.ExposureT;
 import edu.wpi.first.wpilibj.camera.AxisCamera.WhiteBalanceT;
 import edu.wpi.first.wpilibj.camera.AxisCameraException;
 import edu.wpi.first.wpilibj.image.*;
-import edu.wpi.first.wpilibj.image.Image;
 import org.inceptus.debug.Debug;
 
 /**
