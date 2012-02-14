@@ -58,4 +58,11 @@ public class Ramp {
         //Return Success
         return true;
     }
+    
+    public boolean stop(){
+        //Stop the motor
+        rampMotor.set(0);
+        //Return Success
+        return true;
+    }
 }

@@ -14,7 +14,7 @@ public class UpperShooter {
     private CANJaguar upperShootingMotor;
     private CANJaguar lowerShootingMotor;
     
-    private int targetRPM = 0;
+    private double targetRPM = 0;
     
     public boolean init(){
         //Try catch for errors
@@ -61,8 +61,8 @@ public class UpperShooter {
                     return false;
                 }else{
                     //Speed up the motors
-                    lowerShootingMotor.setX( lowerShootingMotor.getX() + 1 );
-                    upperShootingMotor.setX( upperShootingMotor.getX() + 1 );
+                    lowerShootingMotor.setX( lowerShootingMotor.getX() + .01 );
+                    upperShootingMotor.setX( upperShootingMotor.getX() + .01 );
                     //Return not ready
                     return false;
                 }
@@ -106,9 +106,34 @@ public class UpperShooter {
         //TODO: Callback after say 5 seconds to stop the motor
     }
     
-    private int inchesToRPMs(double inches){
-        //TODO calc
-        return (int) inches;
+    public double inchesToRPMs(double distance){
+        int angle = 45;
+        int hoop = 4; 
+        double wheelDiameter = 6;
+        //Calculate height
+        int height = 0;
+        //Switch for hoop
+        switch(hoop){
+            case 1:
+                height = 34;
+                break;
+            case 2:
+            case 3:
+                height = 60;
+                break;
+            case 4:
+            default:
+                height = 91;
+                break;
+        }
+        //Add adjustment for air resistance.
+        distance *= 1.05;
+        //Change angle from degrees to radians
+        double angleRads = angle * Math.PI/180;
+        //Calculate velocity needed and chnage to RPM required
+        double velocity = (distance - 9)/(Math.sqrt((46 - height+(distance - 9)*Math.tan(angleRads))/16.087) * Math.cos(angleRads));
+        double RPM = velocity * 60 / (wheelDiameter * Math.PI);
+        return RPM;
     }
     
     private boolean isAtSpeed() throws CANTimeoutException{

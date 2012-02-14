@@ -22,14 +22,14 @@ public class LowerConveyor {
         } catch (CANTimeoutException ex) { //Catch CANTimeout Error
             
             //Print Error
-            Debug.fatal(ex, "CAN Timeout in Drive");
+            Debug.fatal(ex, "CAN Timeout in " + this.getClass().getName());
             //Return Failure
             return false;
 
         } catch (Exception ex){ //Catch all for errors
 
             //Print Error
-            Debug.fatal(ex, "Unknown error in Drive");
+            Debug.fatal(ex, "Unknown error in " + this.getClass().getName());
             //Return Failure
             return false;
         }
@@ -39,10 +39,12 @@ public class LowerConveyor {
     }
     
     public void moveUp() throws CANTimeoutException{
+        //Go up at not full power to break conveyor
         conveyorMotor.setX(.5);
     }
     
     public void moveDown() throws CANTimeoutException{
+        //May be jamed
         conveyorMotor.setX(-1);
     }
     

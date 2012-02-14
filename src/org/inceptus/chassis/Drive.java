@@ -42,14 +42,14 @@ public class Drive {
         } catch (CANTimeoutException ex) { //Catch CANTimeout Error
             
             //Print Error
-            Debug.fatal(ex, "CAN Timeout in Drive");
+            Debug.fatal(ex, "CAN Timeout in " + this.getClass().getName());
             //Return Failure
             return false;
 
         } catch (Exception ex){ //Catch all for errors
 
             //Print Error
-            Debug.fatal(ex, "Unknown error in Drive");
+            Debug.fatal(ex, "Unknown error in " + this.getClass().getName());
             //Return Failure
             return false;
         }
