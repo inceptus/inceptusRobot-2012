@@ -35,6 +35,7 @@ public class Target {
     public Target(int index, double bboxCornerX, double bboxCornerY,
                   double bboxWidth, double bboxHeight, 
                   double centerX, double centerY) {
+        
         this.index = index;
         rawBboxCornerX = bboxCornerX;
         rawBboxCornerY = bboxCornerY;
@@ -45,12 +46,7 @@ public class Target {
         ratio = bboxWidth / bboxHeight;
         centerMassX = centerX;
         centerMassY = centerY;
-        calculateHeight();
         
-        distance = 3185.6 / (rawBboxHeight * Math.tan(0.4101));
-    }
-    
-    public void calculateHeight(){
         //FUN MATH TIME. This will calculate the actual distance to be used for skew.
         double w = rawBboxWidth;
         double h = rawBboxHeight;
@@ -63,6 +59,9 @@ public class Target {
         double a = (r_2 - r_1 * r_4) / (r_3 - r_1);
         double b = (r_2 - r_3 * r_4) / (r_3 - r_1);
         actualHeight = (b - a) * centerMassX / w + h - b;
+        
+        distance = 3185.6 / (rawBboxHeight * Math.tan(0.4101));
+        
     }
     
     //Ease of use constuctor
