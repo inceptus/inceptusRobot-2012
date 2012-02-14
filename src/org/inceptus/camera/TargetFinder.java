@@ -48,7 +48,7 @@ public class TargetFinder {
     //Setup the camera
     AxisCamera cam;
     
-    //Top target found
+    //Top target
     private Target highTarget = Target.NullTarget;
     
     //Other 4 targets
@@ -62,8 +62,9 @@ public class TargetFinder {
     private CriteriaCollection inertiaCriteria;
 
     public TargetFinder() {
+        
         //Log
-        Debug.log("TargetFinder() begin " + Timer.getFPGATimestamp());
+        Debug.log("TargetFinder() begin");
 
         //Start to conncet to the camera
         cam = AxisCamera.getInstance();
@@ -92,8 +93,9 @@ public class TargetFinder {
         inertiaCriteria.addCriteria(NIVision.MeasurementType.IMAQ_MT_NORM_MOMENT_OF_INERTIA_YY,
                 0, inertiaYMin, true);
         
-        //Wait for the camera to start - seconds
+        //Wait for the camera to start (seconds)
         Timer.delay(8);
+        
     }
 
     private void addTarget(Target t) {
@@ -112,6 +114,7 @@ public class TargetFinder {
     }
 
     public Target processImage() {
+        
         //If the image is the latest
         boolean success = cam.freshImage();
         //If we got the latest image successfully
@@ -152,12 +155,13 @@ public class TargetFinder {
                 Debug.log(particles.length + " particles at " + Timer.getFPGATimestamp());
 
                 
-                //Targets aren't found yet so tehy are null.
+                //Targets aren't found yet so they are null.
                 highTarget = Target.NullTarget;
                 target1 = Target.NullTarget;
                 target2 = Target.NullTarget;
                 target3 = Target.NullTarget;
                 target4 = Target.NullTarget;
+                
                 //Log
                 Debug.log("Targets created");
                 
@@ -194,18 +198,24 @@ public class TargetFinder {
                 return highTarget;
                 
             } catch (AxisCameraException ex) {
-                System.out.println("Axis Camera Exception Gotten" + ex.getMessage());
-                ex.printStackTrace();
+                
+                //Print Error
+                Debug.fatal(ex, "Axis Camera Error " + this.getClass().getName());
+
             } catch (NIVisionException ex) {
-                System.out.println("NIVision Exception Gotten - " + ex.getMessage());
-                ex.printStackTrace();
+                
+                //Print Error
+                Debug.fatal(ex, "NIVision Error " + this.getClass().getName());
+                
+            } catch (Exception ex){
+                
+                //Print Error
+                Debug.fatal(ex, "Unknown Error " + this.getClass().getName());
+                
             }
         }
         return Target.NullTarget;
     }
-    
-    //Method assumes the camera is looking at the rectangle straight on: can be adjusted later
-    
     
     public Target getHighestTarget() {
         return highTarget;
