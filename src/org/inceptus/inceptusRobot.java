@@ -7,16 +7,13 @@
 
 package org.inceptus;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Kinect;
 import org.inceptus.OI.OI;
 import org.inceptus.camera.Target;
+import org.inceptus.camera.TargetFinder;
 import org.inceptus.chassis.Drive;
 import org.inceptus.chassis.LowerConveyor;
 import org.inceptus.chassis.Ramp;
-//import org.inceptus.chassis.UpperShooter;
-import org.inceptus.camera.TargetFinder;
 import org.inceptus.chassis.UpperShooter;
 import org.inceptus.debug.Debug;
 
