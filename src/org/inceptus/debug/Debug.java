@@ -37,9 +37,4 @@ public class Debug {
         //Save to file
         im.write("inceptus-"+Timer.getFPGATimestamp()+".jpg");
     }
-
-    public static void logImage(BinaryImage im) throws NIVisionException {
-        //Save to file
-        im.write("inceptus-"+Timer.getFPGATimestamp()+".jpg");
-    }
 }
