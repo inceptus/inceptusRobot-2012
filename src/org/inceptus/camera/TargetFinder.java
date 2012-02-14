@@ -22,9 +22,9 @@ public class TargetFinder {
     private final int redLow = 200;
     private final int redHigh = 256;
     private final int greenLow = 0;
-    private final int greenHigh = 100;
+    private final int greenHigh = 128;
     private final int blueLow = 0;
-    private final int blueHigh = 100;
+    private final int blueHigh = 128;
     
     //Setup the box min height and widths
     private final int bboxWidthMin = 400;
@@ -39,9 +39,9 @@ public class TargetFinder {
     private final double ratioMax = 2;
     
     //Setup the cam values
-    private final int camBrightness = 0;
-    private final int camColor = 100;
-    private final WhiteBalanceT camWhiteBalance = WhiteBalanceT.automatic;
+    private final int camBrightness = 50;
+    private final int camColor = 50;
+    private final WhiteBalanceT camWhiteBalance = WhiteBalanceT.hold;
     private final ExposureT camExposure = ExposureT.hold;
     public static final int IMAGE_WIDTH = 320;
     public static final int IMAGE_HEIGHT = 240;
@@ -112,7 +112,7 @@ public class TargetFinder {
         
     }
 
-    public boolean processImage() {
+    public Target processImage() {
         //If the image is the latest
         boolean success = cam.freshImage();
         //If we got the latest image successfully
@@ -137,13 +137,6 @@ public class TargetFinder {
                         greenLow, greenHigh,
                         blueLow, blueHigh
                 );
-                //If Debug is enabled
-                if (debug) {
-                    //Save a debug threshold image
-                    Debug.logImage(thresholdIm);
-                    //Log image save
-                    Debug.log("Saved Threshold Image");
-                }
                 
                 //Run a particle filter using the box criteria
                 BinaryImage filteredBoxIm = thresholdIm.particleFilter(boxCriteria);
@@ -181,32 +174,25 @@ public class TargetFinder {
                         //Add the target
                         addTarget(t);
                         //If it is largest Y value (highest)
-                        if (t.centerY <= minY) {
+                        if (t.boxCenterY <= minY) {
                             //Save at the hightarget
                             highTarget = t;
                         }
                     }
                     //Log
-                    Debug.log("Target " + i + ": (" + t.centerX + "," + t.centerY + ") Distance: " + getDistance(t));
+                    Debug.log("Target " + i + ": (" + t.boxCenterX + "," + t.boxCenterY + ") Distance: " + t.distance);
                 }
                 //Log
                 Debug.log("Best target: " + highTarget.index);
-                Debug.log("Distance to the target: " + getDistance(highTarget));
-                
-                //If debug is enabled
-                if (debug) {
-                    //Save the images
-                    Debug.logImage(filteredBoxIm);
-                    Debug.logImage(filteredInertiaIm);
-                    //Log
-                    Debug.log("Wrote filtered images");
-                }
+                Debug.log("Distance to the target: " + highTarget.distance);
                 
                 //Free images from memory.
                 im.free();
                 thresholdIm.free();
                 filteredBoxIm.free();
                 filteredInertiaIm.free();
+                
+                return highTarget;
                 
             } catch (AxisCameraException ex) {
                 System.out.println("Axis Camera Exception Gotten" + ex.getMessage());
@@ -216,15 +202,11 @@ public class TargetFinder {
                 ex.printStackTrace();
             }
         }
-        return success;
+        return Target.NullTarget;
     }
     
     //Method assumes the camera is looking at the rectangle straight on: can be adjusted later
-    public double getDistance(Target t) {
-        double result;
-        result = 3185.6 / (t.rawBboxHeight * Math.tan(0.4101));
-        return (result);
-    }
+    
     
     public Target getHighestTarget() {
         return highTarget;
