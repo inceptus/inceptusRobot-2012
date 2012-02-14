@@ -8,6 +8,7 @@
 package org.inceptus;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.can.CANTimeoutException;
 import org.inceptus.OI.OI;
 import org.inceptus.camera.Target;
 import org.inceptus.camera.TargetFinder;
@@ -49,23 +50,34 @@ public class inceptusRobot extends IterativeRobot {
      */
     public void robotInit() {
         
-        //TODO: Catch false error returns and handle
-        
         //Get the target finder class
         targetFinder = new TargetFinder();
         
-        //Get the drive class
-        drive = new Drive();
+        try {
+            
+            //Get the drive class
+            drive = new Drive();
+            
+        } catch (CANTimeoutException ex) { Debug.fatal(ex); }
         
         //Get the ramp class
         ramp = new Ramp();
         
-        //Get the ramp class
-        lowerConveyor = new LowerConveyor();
+        try {
+            
+            //Get the ramp class
+            lowerConveyor = new LowerConveyor();
+            
+        } catch (CANTimeoutException ex) { Debug.fatal(ex); }
 
-        upperShooter = new UpperShooter();
-        
-        //Get the oi class
+        try {
+            
+            //Get the upper shooter class
+            upperShooter = new UpperShooter();
+            
+        } catch (CANTimeoutException ex) { Debug.fatal(ex); }
+            
+        //Get the OI class
         oi = new OI();
         
     }
