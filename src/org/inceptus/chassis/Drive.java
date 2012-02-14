@@ -20,7 +20,7 @@ public class Drive {
     private RobotDrive robotDrive;
 
     //Initilize
-    public boolean init(){
+    public Drive(){
         //Try catch for errors
         try {
 
@@ -43,18 +43,12 @@ public class Drive {
             
             //Print Error
             Debug.fatal(ex, "CAN Timeout in " + this.getClass().getName());
-            //Return Failure
-            return false;
 
         } catch (Exception ex){ //Catch all for errors
 
             //Print Error
             Debug.fatal(ex, "Unknown error in " + this.getClass().getName());
-            //Return Failure
-            return false;
         }
-        //Return Success
-        return true;
     }
 
     public boolean driveWithValues(double x, double y, double rotation){

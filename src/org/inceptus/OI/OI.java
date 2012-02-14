@@ -18,13 +18,12 @@ public class OI {
     private InJoystick mainJoy;
     private Joystick otherJoy;
     
-    public boolean init(){
+    public OI(){
+        
         //Init the joysticks
         mainJoy = new InJoystick(1);
         otherJoy = new Joystick(2);
         
-        //Return Success
-        return true;
     }
     
     public boolean driveWithJoy(Drive drive){
@@ -49,6 +48,7 @@ public class OI {
         }else{
             ramp.moveUp();
         }
+        
     }
     
     public void updateCamera(TargetFinder targetFinder){
@@ -57,6 +57,7 @@ public class OI {
             //Get a new image
             targetFinder.processImage();
         }
+        
     }
     
     
@@ -64,6 +65,7 @@ public class OI {
         
         //Try catch for errors
         try {
+            
             //If the conveyor button is pressed
             if(mainJoy.getRawButton(4)){
                 lowerConveyor.moveDown();
@@ -72,6 +74,7 @@ public class OI {
             }else{
                 lowerConveyor.stop();
             }
+            
         } catch (CANTimeoutException ex) { //Catch CANTimeout Error
             
             //Print Error
@@ -83,5 +86,6 @@ public class OI {
             Debug.fatal(ex, "Unknown error in " + this.getClass().getName());
 
         }
+        
     }
 }

@@ -15,7 +15,7 @@ public class Ramp {
     private DigitalInput upperLimitSwitch;
     
     
-    public boolean init(){
+    public Ramp(){
         
         //Setup the ramp motor
         rampMotor = new Victor(6);
@@ -23,9 +23,6 @@ public class Ramp {
         //Setup the Limit Switches
         lowerLimitSwitch = new DigitalInput(1);
         upperLimitSwitch = new DigitalInput(2);
-        
-        //Return Success
-        return true;
         
     }
     

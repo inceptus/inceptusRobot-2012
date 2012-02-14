@@ -59,26 +59,17 @@ public class inceptusRobot extends IterativeRobot {
         
         //Get the drive class
         drive = new Drive();
-        //Try to init the drive
-        //drive.init();
         
         //Get the ramp class
         ramp = new Ramp();
-        //Try to init the ramp
-        //ramp.init();
         
         //Get the ramp class
         lowerConveyor = new LowerConveyor();
-        //Try to init the ramp
-        //lowerConveyor.init();
 
         upperShooter = new UpperShooter();
         
         //Get the oi class
         oi = new OI();
-        //Init the OI
-        oi.init();
-        
         
     }
 

@@ -16,7 +16,7 @@ public class UpperShooter {
     
     private double targetRPM = 0;
     
-    public boolean init(){
+    public UpperShooter(){
         //Try catch for errors
         try {
             
@@ -29,19 +29,14 @@ public class UpperShooter {
             
             //Print Error
             Debug.fatal(ex, "CAN Timeout in " + this.getClass().getName());
-            //Return Failure
-            return false;
+            
 
         } catch (Exception ex){ //Catch all for errors
 
             //Print Error
             Debug.fatal(ex, "Unknown error in " + this.getClass().getName());
-            //Return Failure
-            return false;
+            
         }
-        //Return Success
-        return true;
-        
     }
     
     public void prepareToShoot( int inches ){

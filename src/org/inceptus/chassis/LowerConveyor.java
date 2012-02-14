@@ -12,7 +12,7 @@ public class LowerConveyor {
     
     private CANJaguar conveyorMotor;
     
-    public boolean init(){
+    public LowerConveyor(){
         //Try catch for errors
         try {
             
@@ -23,19 +23,12 @@ public class LowerConveyor {
             
             //Print Error
             Debug.fatal(ex, "CAN Timeout in " + this.getClass().getName());
-            //Return Failure
-            return false;
 
         } catch (Exception ex){ //Catch all for errors
 
             //Print Error
             Debug.fatal(ex, "Unknown error in " + this.getClass().getName());
-            //Return Failure
-            return false;
-        }
-        //Return Success
-        return true;
-        
+        }  
     }
     
     public void moveUp() throws CANTimeoutException{
