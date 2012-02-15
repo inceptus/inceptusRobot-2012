@@ -2,7 +2,6 @@ package org.inceptus.chassis;
 
 import edu.wpi.first.wpilibj.CANJaguar;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
-import org.inceptus.debug.Debug;
 
 /**
  *
@@ -14,7 +13,9 @@ public class UpperShooter {
     private CANJaguar upperShootingMotor;
     private CANJaguar lowerShootingMotor;
     
-    private double targetRPM = 0;
+    private double offset = 0;
+    
+    private double targetSpeed = 0;
     
     public UpperShooter() throws CANTimeoutException{
             
@@ -23,97 +24,81 @@ public class UpperShooter {
             upperShootingMotor = new CANJaguar(15);
             lowerShootingMotor = new CANJaguar(16);
             
+            //Coast motors
+            upperShootingMotor.configNeutralMode(CANJaguar.NeutralMode.kCoast);
+            lowerShootingMotor.configNeutralMode(CANJaguar.NeutralMode.kCoast);
+            
     }
     
-    public void prepareToShoot( int inches ){
-        targetRPM = inchesToRPMs(inches);
-    }
-    
-    public boolean perodic() throws CANTimeoutException {
+    public void prepareToShoot( double inches){
         
-        if(isAtSpeed()){
-            return true;
-        }else{
-            //If at full power
-            if( lowerShootingMotor.getX() == 100 ){
-                //Decrease target RPMs
-                targetRPM -= 100;
-                //Return not ready
-                return false;
-            }else{
-                //Speed up the motors
-                lowerShootingMotor.setX( lowerShootingMotor.getX() + .01 );
-                upperShootingMotor.setX( upperShootingMotor.getX() + .01 );
-                //Return not ready
-                return false;
-            }
+        //Prebuilt values
+        final double maxPower = 1;
+        final int maxDistance = 30 * 12;
+        final double minPower = .2;
+        final int minDistance = 2 * 12;
+        
+        //y2(maxDistance) = maxPower
+        //y1(minDistance) = minPower
+        //(y2 - y1)/(x2 - x1)
+        
+        //Assume linear
+        double temp = (maxPower - minPower)/(maxDistance - minDistance) * inches;
+        
+        //Catch bad (>1) case
+        if(temp > 1){
+            temp = 1;
         }
+        
+        //Catch bad negative values
+        if(temp < 0){
+            temp = 0;
+        }
+        
+        temp += offset;
+        
+        targetSpeed = temp;
+
+    }
+    
+    public void set() throws CANTimeoutException {
+        
+        //Go fast
+        lowerShootingMotor.setX(targetSpeed);
+        //Slower to add backspin
+        upperShootingMotor.setX(targetSpeed * .95);
                 
     }
     
-    public void stop(){
-        try{
-            targetRPM = 0;
-            lowerShootingMotor.setX(0);
-            upperShootingMotor.setX(0);
-        } catch (CANTimeoutException ex) { //Catch CANTimeout Error
-            
-            //Print Error
-            Debug.fatal(ex, "CAN Timeout in " + this.getClass().getName());
-
-        } catch (Exception ex){ //Catch all for errors
-
-            //Print Error
-            Debug.fatal(ex, "Unknown error in " + this.getClass().getName());
-
-        }
+    public void stopShooting() throws CANTimeoutException{
+        
+        targetSpeed = 0;
+        lowerShootingMotor.setX(0);
+        upperShootingMotor.setX(0);
+        
     }
     
-    public void shoot() {
-        //TODO: Callback after say 5 seconds to stop the motor
+    public void moveConveyorWithValue(double power) throws CANTimeoutException {
+        
+        //Set to power
+        conveyorMotor.setX(power);
+        
     }
     
-    public double inchesToRPMs(double distance){
-        int angle = 45;
-        int hoop = 4; 
-        double wheelDiameter = 6;
-        //Calculate height
-        int height = 0;
-        //Switch for hoop
-        switch(hoop){
-            case 1:
-                height = 34;
-                break;
-            case 2:
-            case 3:
-                height = 60;
-                break;
-            case 4:
-            default:
-                height = 91;
-                break;
-        }
-        //Add adjustment for air resistance.
-        distance *= 1.05;
-        //Change angle from degrees to radians
-        double angleRads = angle * Math.PI/180;
-        //Calculate velocity needed and chnage to RPM required
-        double velocity = (distance - 9)/(Math.sqrt((46 - height+(distance - 9)*Math.tan(angleRads))/16.087) * Math.cos(angleRads));
-        double RPM = velocity * 60 / (wheelDiameter * Math.PI);
-        return RPM;
+    public void stopConveyor() throws CANTimeoutException{
+        
+        //Set to 0
+        conveyorMotor.setX(0);
+        
     }
     
-    private boolean isAtSpeed() throws CANTimeoutException{
-        //If the upper motor is at speed
-        if( upperShootingMotor.getSpeed() >= targetRPM ){
-            //If the lower motor is at speed
-            if( lowerShootingMotor.getSpeed() >= targetRPM ){
-                return true;
-            }else{
-                return false;
-            }
+    public void adjustOffset(boolean direction){
+        
+        if(direction){
+            offset -= .01;
         }else{
-            return false;
-        }
+            offset += .01;
+        };
+        
     }
 }
