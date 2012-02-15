@@ -2,7 +2,6 @@ package org.inceptus.chassis;
 
 import edu.wpi.first.wpilibj.CANJaguar;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
-import org.inceptus.debug.Debug;
 
 /**
  *
@@ -37,6 +36,13 @@ public class LowerConveyor {
         
         //Stop
         conveyorMotor.setX(0);
+        
+    }
+    
+    public void moveValue( double speed ) throws CANTimeoutException{
+        
+        //Move
+        conveyorMotor.setX(speed);
         
     }
 }
