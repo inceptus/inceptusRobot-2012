@@ -30,6 +30,40 @@ public class UpperShooter {
             
     }
     
+    public double inchesToRPMs(double distance){
+        int angle = 57;
+        int hoop = 4;
+        double wheelDiameter = 6;
+        //Calculate height
+        int height = 0;
+        //Switch for hoop
+        switch(hoop){
+            case 1:
+                height = 34;
+                break;
+            case 2:
+            case 3:
+                height = 60;
+                break;
+            case 4:
+            default:
+                height = 91;
+                break;
+        }
+        //Add adjustment for air resistance.
+        distance *= 1.05;
+        //Change angle from degrees to radians
+        double angleRads = angle * Math.PI/180;
+        //Calculate velocity needed and chnage to RPM required
+        double velocity = -16.087*distance*distance/(height-52-distance*Math.tan(angleRads));
+        if(velocity < 0)
+            return 0;
+        else
+            velocity = Math.sqrt(velocity)/Math.cos(angleRads);
+        double RPM = velocity * 60 / (wheelDiameter * Math.PI);
+        return RPM;
+    }
+    
     public void prepareToShoot( double inches){
         
         //Prebuilt values
