@@ -91,32 +91,72 @@ public class inceptusRobot extends IterativeRobot {
         
         Debug.log("Distance:" + (bestTarget.distance/12));
         
-        Debug.log("RPMs:" + upperShooter.inchesToRPMs(bestTarget.distance));
-        
         Debug.log("Distance From Center:" + ((bestTarget.boxCenterX + bestTarget.rawBboxCornerX) - 160));
     }
 
+    public void disabledInit(){
+        //Auto disable the motors for everything
+        
+        //Stop the drive
+        drive.stop();
+        
+        try {
+            
+            //Stop shooting
+            upperShooter.stopShooting();
+            
+        } catch (CANTimeoutException ex) {
+            
+            //Error
+            Debug.fatal(ex);
+            
+        }
+        
+        try {
+            
+            //Stop the shooter
+            upperShooter.stopConveyor();
+            
+        } catch (CANTimeoutException ex) {
+            
+            //Error
+            Debug.fatal(ex);
+            
+        }
+        
+        try {
+            
+            //Stop the lower Conveyor
+            lowerConveyor.stop();
+            
+        } catch (Exception ex) {
+            
+            //Error
+            Debug.fatal(ex);
+            
+        }
+        
+        //Stop the ramp motor
+        ramp.stop();
+        
+    }
+    
     /**
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
         
         //Drive with the latest Joystick values
-        //oi.driveWithJoy(drive);
+        oi.driveWithJoy(drive);
         
         //Move the LowerConveyor
-        //oi.moveLowerConveyor(lowerConveyor);
+        oi.moveLowerConveyor(lowerConveyor);
         
         //Move the ramp using the button values
-        //oi.moveRamp(ramp);
+        oi.moveRamp(ramp);
         
-        oi.updateCamera(targetFinder);
-        
-        
-        
-        /*if(UpperShooter.periodic()){
-            UpperShooter.shoot()
-        }*/
+        //Run the shooter (has camera code also)
+        oi.runUpperShooter(upperShooter, targetFinder);
         
     }
 }
