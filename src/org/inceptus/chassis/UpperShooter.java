@@ -55,7 +55,7 @@ public class UpperShooter {
         //Change angle from degrees to radians
         double angleRads = angle * Math.PI/180;
         //Calculate velocity needed and chnage to RPM required
-        double velocity = -16.087*distance*distance/(height-52-distance*Math.tan(angleRads));
+        double velocity = -193.044*distance*distance/(height-52-distance*Math.tan(angleRads));
         if(velocity < 0)
             return 0;
         else
