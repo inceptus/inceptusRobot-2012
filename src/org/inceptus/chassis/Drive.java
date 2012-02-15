@@ -45,4 +45,11 @@ public class Drive {
         robotDrive.mecanumDrive_Cartesian(x, y, rotation, 0);
             
     }
+    
+    public void stop(){
+        
+        //Stop the motors
+        driveWithValues(0,0,0);
+        
+    }
 }
