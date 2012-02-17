@@ -8,6 +8,7 @@
 package org.inceptus;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Watchdog;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
 import org.inceptus.OI.OI;
 import org.inceptus.camera.Target;
@@ -50,33 +51,24 @@ public class inceptusRobot extends IterativeRobot {
      */
     public void robotInit() {
         
-        //Get the target finder class
-        targetFinder = new TargetFinder();
+        //Disable the watchdog
+        Watchdog.getInstance().setEnabled(false);
         
-        try {
-            
-            //Get the drive class
-            drive = new Drive();
-            
-        } catch (CANTimeoutException ex) { Debug.fatal(ex); }
+        //Get the target finder class
+        //targetFinder = new TargetFinder();
+                    
+        //Get the drive class
+        drive = new Drive();
         
         //Get the ramp class
         ramp = new Ramp();
-        
-        try {
             
-            //Get the ramp class
-            lowerConveyor = new LowerConveyor();
+        //Get the ramp class
+        lowerConveyor = new LowerConveyor();
             
-        } catch (CANTimeoutException ex) { Debug.fatal(ex); }
+        //Get the upper shooter class
+        upperShooter = new UpperShooter();
 
-        try {
-            
-            //Get the upper shooter class
-            upperShooter = new UpperShooter();
-            
-        } catch (CANTimeoutException ex) { Debug.fatal(ex); }
-            
         //Get the OI class
         oi = new OI();
         
@@ -87,11 +79,11 @@ public class inceptusRobot extends IterativeRobot {
      */
     public void autonomousInit() {
         //Process the camera image
-        Target bestTarget = targetFinder.processImage();
+        /*Target bestTarget = targetFinder.processImage();
         
         Debug.log("Distance:" + (bestTarget.distance/12));
         
-        Debug.log("Distance From Center:" + ((bestTarget.boxCenterX + bestTarget.rawBboxCornerX) - 160));
+        Debug.log("Distance From Center:" + ((bestTarget.boxCenterX + bestTarget.rawBboxCornerX) - 160));*/
     }
 
     public void disabledInit(){
@@ -99,42 +91,18 @@ public class inceptusRobot extends IterativeRobot {
         
         //Stop the drive
         drive.stop();
-        
-        try {
-            
-            //Stop shooting
-            upperShooter.stopShooting();
-            
-        } catch (CANTimeoutException ex) {
-            
-            //Error
-            Debug.fatal(ex);
-            
-        }
-        
-        try {
-            
-            //Stop the shooter
-            upperShooter.stopConveyor();
-            
-        } catch (CANTimeoutException ex) {
-            
-            //Error
-            Debug.fatal(ex);
-            
-        }
-        
-        try {
-            
-            //Stop the lower Conveyor
-            lowerConveyor.stop();
-            
-        } catch (Exception ex) {
-            
-            //Error
-            Debug.fatal(ex);
-            
-        }
+
+        //Stop shooting
+        upperShooter.stopShooting();
+
+
+        //Stop the shooter
+        upperShooter.stopConveyor();
+
+
+        //Stop the lower Conveyor
+        lowerConveyor.stop();
+
         
         //Stop the ramp motor
         ramp.stop();
@@ -156,7 +124,9 @@ public class inceptusRobot extends IterativeRobot {
         oi.moveRamp(ramp);
         
         //Run the shooter (has camera code also)
-        oi.runUpperShooter(upperShooter, targetFinder);
+        oi.runUpperConvey(upperShooter);
         
+        //test shoot
+        oi.testShoot(upperShooter);
     }
 }
