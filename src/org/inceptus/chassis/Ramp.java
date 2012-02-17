@@ -18,7 +18,7 @@ public class Ramp {
     public Ramp(){
         
         //Setup the ramp motor
-        rampMotor = new Victor(6);
+        rampMotor = new Victor(4);
         
         //Setup the Limit Switches
         lowerLimitSwitch = new DigitalInput(1);
@@ -29,12 +29,12 @@ public class Ramp {
     public boolean moveUp(){
         
         //If the limit switch is pressed or not
-        if(upperLimitSwitch.get()){
+        if(!upperLimitSwitch.get()){
             //Hold position
             rampMotor.set(0);
         }else{
             //Drive up
-            rampMotor.set(.4);
+            rampMotor.set(.2);
         }
         
         //Return Success
@@ -44,12 +44,12 @@ public class Ramp {
     public boolean moveDown(){
         
         //If the limit switch is pressed or not
-        if(lowerLimitSwitch.get()){
+        if(!lowerLimitSwitch.get()){
             //Hold position
             rampMotor.set(0);
         }else{
             //Drive down
-            rampMotor.set(-.4);
+            rampMotor.set(-.5);
         }
         
         //Return Success

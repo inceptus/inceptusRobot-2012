@@ -1,11 +1,9 @@
 package org.inceptus.chassis;
 
-import edu.wpi.first.wpilibj.ADXL345_I2C;
-import edu.wpi.first.wpilibj.CANJaguar;
 import edu.wpi.first.wpilibj.Gyro;
+import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.RobotDrive.MotorType;
-import edu.wpi.first.wpilibj.can.CANTimeoutException;
 import org.inceptus.debug.Debug;
 
 /**
@@ -15,25 +13,25 @@ import org.inceptus.debug.Debug;
 public class Drive {
     
     //Motors
-    private CANJaguar leftFront;
-    private CANJaguar rightFront;
-    private CANJaguar leftRear;
-    private CANJaguar rightRear;
+    private Jaguar leftFront;
+    private Jaguar rightFront;
+    private Jaguar leftRear;
+    private Jaguar rightRear;
     //Drive
     private RobotDrive robotDrive;
     //accelerometer
-    private ADXL345_I2C accelerometer;
+    //private ADXL345_I2C accelerometer;
     //Gyro
     private Gyro gyro;
     
     //Initilize
-    public Drive() throws CANTimeoutException{
+    public Drive(){
 
         //Setup the drive motors
-        leftFront = new CANJaguar(12);
-        rightFront = new CANJaguar(11);
-        leftRear = new CANJaguar(10);
-        rightRear = new CANJaguar(5);
+        leftFront = new Jaguar(7);
+        rightFront = new Jaguar(8);
+        leftRear = new Jaguar(9);
+        rightRear = new Jaguar(10);
 
         //Setup the Drive
         robotDrive = new RobotDrive(leftFront, leftRear, rightFront, rightRear);
@@ -49,15 +47,14 @@ public class Drive {
     public void driveWithValues(double x, double y, double rotation){
 
         //Drive using values
-        robotDrive.mecanumDrive_Cartesian(x, y, rotation, 0);
+        robotDrive.mecanumDrive_Cartesian(x, -y, -rotation, 0);
             
     }
     
     public void stop(){
         
         //Stop the motors
-        driveWithValues(0,0,0);
-        
+        robotDrive.stopMotor();
     }
     
     public void balance(){

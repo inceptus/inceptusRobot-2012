@@ -1,7 +1,6 @@
 package org.inceptus.chassis;
 
-import edu.wpi.first.wpilibj.CANJaguar;
-import edu.wpi.first.wpilibj.can.CANTimeoutException;
+import edu.wpi.first.wpilibj.Jaguar;
 
 /**
  *
@@ -9,40 +8,40 @@ import edu.wpi.first.wpilibj.can.CANTimeoutException;
  */
 public class LowerConveyor {
     
-    private CANJaguar conveyorMotor;
+    private Jaguar conveyorMotor;
     
-    public LowerConveyor() throws CANTimeoutException{
+    public LowerConveyor(){
 
         //Setup the Jaguar
-        conveyorMotor = new CANJaguar(14);
+        conveyorMotor = new Jaguar(6);
            
     }
     
-    public void moveUp() throws CANTimeoutException{
+    public void moveUp(){
         
         //Go up at not full power to break conveyor
-        conveyorMotor.setX(.5);
+        conveyorMotor.set(.5);
         
     }
     
-    public void moveDown() throws CANTimeoutException{
+    public void moveDown(){
         
         //May be jamed
-        conveyorMotor.setX(-1);
+        conveyorMotor.set(-1);
         
     }
     
-    public void stop() throws CANTimeoutException{
+    public void stop(){
         
         //Stop
-        conveyorMotor.setX(0);
+        conveyorMotor.set(0);
         
     }
     
-    public void moveValue( double speed ) throws CANTimeoutException{
+    public void moveValue( double speed ){
         
         //Move
-        conveyorMotor.setX(speed);
+        conveyorMotor.set(speed);
         
     }
 }

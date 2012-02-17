@@ -1,6 +1,6 @@
 package org.inceptus.chassis;
 
-import edu.wpi.first.wpilibj.CANJaguar;
+import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
 
 /**
@@ -9,24 +9,24 @@ import edu.wpi.first.wpilibj.can.CANTimeoutException;
  */
 public class UpperShooter {
     
-    private CANJaguar conveyorMotor;
-    private CANJaguar upperShootingMotor;
-    private CANJaguar lowerShootingMotor;
+    private Jaguar conveyorMotor;
+    private Jaguar upperShootingMotor;
+    private Jaguar lowerShootingMotor;
     
     private double offset = 0;
     
     private double targetSpeed = 0;
     
-    public UpperShooter() throws CANTimeoutException{
+    public UpperShooter(){
             
             //Setup the Jaguars
-            conveyorMotor = new CANJaguar(14);
-            upperShootingMotor = new CANJaguar(15);
-            lowerShootingMotor = new CANJaguar(16);
+            conveyorMotor = new Jaguar(5);
+            upperShootingMotor = new Jaguar(2);
+            lowerShootingMotor = new Jaguar(3);
             
             //Coast motors
-            upperShootingMotor.configNeutralMode(CANJaguar.NeutralMode.kCoast);
-            lowerShootingMotor.configNeutralMode(CANJaguar.NeutralMode.kCoast);
+            //upperShootingMotor.configNeutralMode(CANJaguar.NeutralMode.kCoast);
+            //lowerShootingMotor.configNeutralMode(CANJaguar.NeutralMode.kCoast);
             
     }
     
@@ -61,34 +61,34 @@ public class UpperShooter {
 
     }
     
-    public void set() throws CANTimeoutException {
+    public void set(){
         
         //Go fast
-        lowerShootingMotor.setX(targetSpeed);
+        lowerShootingMotor.set(targetSpeed);
         //Slower to add backspin
-        upperShootingMotor.setX(targetSpeed * .95);
+        upperShootingMotor.set(targetSpeed * .95);
                 
     }
     
-    public void stopShooting() throws CANTimeoutException{
+    public void stopShooting(){
         
         targetSpeed = 0;
-        lowerShootingMotor.setX(0);
-        upperShootingMotor.setX(0);
+        lowerShootingMotor.set(0);
+        upperShootingMotor.set(0);
         
     }
     
-    public void moveConveyorWithValue(double power) throws CANTimeoutException {
+    public void moveConveyorWithValue(double power){
         
         //Set to power
-        conveyorMotor.setX(power);
+        conveyorMotor.set(power);
         
     }
     
-    public void stopConveyor() throws CANTimeoutException{
+    public void stopConveyor(){
         
         //Set to 0
-        conveyorMotor.setX(0);
+        conveyorMotor.set(0);
         
     }
     
