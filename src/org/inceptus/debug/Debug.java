@@ -52,8 +52,7 @@ public class Debug {
         System.out.println( "(inceptus) Log Message:" + msg );
         
         //Send message to driverstation
-        DriverStationLCD.getInstance().println( DriverStationLCD.Line.kUser2, 1,
-                "Log:" + msg );
+        DriverStationLCD.getInstance().println( DriverStationLCD.Line.kUser2, 1, msg );
         
         //Display
         DriverStationLCD.getInstance().updateLCD();
