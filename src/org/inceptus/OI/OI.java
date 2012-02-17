@@ -1,7 +1,6 @@
 package org.inceptus.OI;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.can.CANTimeoutException;
 import org.inceptus.camera.Target;
 import org.inceptus.camera.TargetFinder;
 import org.inceptus.chassis.Drive;
@@ -48,7 +47,7 @@ public class OI {
     public void moveRamp(Ramp ramp) {
         
         //If the ramp button is pressed
-        if(mainJoy.getRawButton(1)){
+        if(otherJoy.getRawButton(1)){
             //Call the down routine
             ramp.moveDown();
         }else{
@@ -58,8 +57,15 @@ public class OI {
         
     }
     
-    public void runUpperShooter(UpperShooter upperShooter, TargetFinder targetFinder){
+    public void runUpperConvey(UpperShooter upperShooter){
         
+        //If the shoot values are set
+        upperShooter.moveConveyorWithValue(otherJoy.getRawAxis(5) * -1);
+        
+    }
+   
+    public void runUpperShooter(UpperShooter upperShooter, TargetFinder targetFinder){
+        /*
         //Calc buttons from the POV hat
         boolean button1 = (otherJoy.getRawAxis(6) == 1);
         boolean button2 = (otherJoy.getRawAxis(6) == -1);
@@ -96,47 +102,19 @@ public class OI {
         
         //If the ramp up button is pressed
         if(mainJoy.getRawButton(4)){
-            
-            try{
                 
-                //Set the motor powers
-                upperShooter.set();
-                
-            } catch (Exception ex){ //Catch all for errors
-
-                //Print Error
-                Debug.fatal(ex);
-
-            }
+            //Set the motor powers
+            upperShooter.set();
             
         }else{
             
-            try{
-                
-                //Stop the motor
-                upperShooter.stopShooting();
-                
-            } catch (Exception ex){ //Catch all for errors
+            //Stop the motor
+            upperShooter.stopShooting();
+            
+        }*/
 
-                //Print Error
-                Debug.fatal(ex);
+        
 
-            }
-            
-        }
-        
-        try {
-            
-            //If the shoot values are set
-            upperShooter.moveConveyorWithValue(otherJoy.getRawAxis(5));
-            
-        } catch (CANTimeoutException ex) {
-            
-            //Print Error
-            Debug.fatal(ex);
-            
-        }
-        
     }
     
     
@@ -145,7 +123,7 @@ public class OI {
         //Try catch for errors
         try {
             
-            lowerConveyor.moveValue(otherJoy.getRawAxis(4));
+            lowerConveyor.moveValue(otherJoy.getRawAxis(2) * .7);
             
         } catch (Exception ex){ //Catch all for errors
 
@@ -154,5 +132,16 @@ public class OI {
 
         }
         
+    }
+    
+    public void testShoot(UpperShooter upperShooter){
+        
+        if(otherJoy.getRawButton(2)){
+            upperShooter.prepareToShoot(500);
+        }else{
+            upperShooter.stopShooting();
+        }
+        
+        upperShooter.set();
     }
 }
