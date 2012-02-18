@@ -20,14 +20,14 @@ public class LowerConveyor {
     public void moveUp(){
         
         //Go up at not full power to break conveyor
-        conveyorMotor.set(.5);
+        conveyorMotor.set(-.5);
         
     }
     
     public void moveDown(){
         
         //May be jamed
-        conveyorMotor.set(-1);
+        conveyorMotor.set(1);
         
     }
     

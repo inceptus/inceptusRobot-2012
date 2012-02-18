@@ -1,5 +1,7 @@
 package org.inceptus.chassis;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
 
@@ -30,13 +32,13 @@ public class UpperShooter {
             
     }
     
-    public void prepareToShoot( double inches){
+    public void prepareToShoot( double inches ){
         
         //Prebuilt values
-        final double maxPower = 1;
-        final int maxDistance = 30 * 12;
-        final double minPower = .2;
-        final int minDistance = 2 * 12;
+        final double maxPower = .5;
+        final int maxDistance = 16 * 12;
+        final double minPower = .3;
+        final int minDistance = (int) (9.35 * 12);
         
         //y2(maxDistance) = maxPower
         //y1(minDistance) = minPower
@@ -45,9 +47,9 @@ public class UpperShooter {
         //Assume linear
         double temp = (maxPower - minPower)/(maxDistance - minDistance) * inches;
         
-        //Catch bad (>1) case
-        if(temp > 1){
-            temp = 1;
+        //Catch bad (>.5) case where motors burn out
+        if(temp > .8){
+            temp = .8;
         }
         
         //Catch bad negative values
@@ -58,10 +60,31 @@ public class UpperShooter {
         temp += offset;
         
         targetSpeed = temp;
+        
+        System.out.println("Test:" + temp);
+        
+        DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser2, 1, ""+temp);
+        
+        DriverStationLCD.getInstance().updateLCD();
 
     }
     
+    public void setTest( double speed ){
+        targetSpeed = speed;
+    }
+    
     public void set(){
+        
+        //
+        
+        //90 -  3500/3600
+        //80 -  3200/3300
+        //70 -  2800/2900
+        //60 -  2400/2500
+        //50 -  1900/2100
+        //40 -  1400/1600
+        //30 -  0874/1100
+        
         
         //Go fast
         lowerShootingMotor.set(targetSpeed);

@@ -8,6 +8,7 @@
 package org.inceptus;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Watchdog;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
 import org.inceptus.OI.OI;
@@ -55,7 +56,7 @@ public class inceptusRobot extends IterativeRobot {
         Watchdog.getInstance().setEnabled(false);
         
         //Get the target finder class
-        //targetFinder = new TargetFinder();
+        targetFinder = new TargetFinder();
                     
         //Get the drive class
         drive = new Drive();
@@ -78,31 +79,63 @@ public class inceptusRobot extends IterativeRobot {
      * This function is called once during autonomous
      */
     public void autonomousInit() {
-        //Process the camera image
-        /*Target bestTarget = targetFinder.processImage();
         
-        Debug.log("Distance:" + (bestTarget.distance/12));
+        //Start the wheels
+        upperShooter.prepareToShoot(176);
         
-        Debug.log("Distance From Center:" + ((bestTarget.boxCenterX + bestTarget.rawBboxCornerX) - 160));*/
+        //Run
+        upperShooter.set();
+        
+        //Wait 1 second
+        Timer.delay(1);
+        
+        //Bring in 1 ball
+        lowerConveyor.moveUp();
+        
+        //Wait 3 seconds
+        Timer.delay(3);
+        
+        //Stop the lower Conveyor
+        lowerConveyor.stop();
+        
+        //Push ball into shooter
+        upperShooter.moveConveyorWithValue(1);
+        
+        //Delay 4 seconds to shoot and then repeat
+        Timer.delay(4);
+        
+        //Stop
+        upperShooter.stopConveyor();
+        
+        //Bring in 1 ball
+        lowerConveyor.moveUp();
+        
+        //Push ball into shooter
+        upperShooter.moveConveyorWithValue(1);
+        
+        //Delay 6 seconds to shoot and then repeat
+        Timer.delay(6);
+        
+        //Stop shooting and conveyors
+        upperShooter.stopConveyor();
+        upperShooter.stopShooting();
+        lowerConveyor.stop();
+        
     }
-
+    
     public void disabledInit(){
-        //Auto disable the motors for everything
-        
+
         //Stop the drive
         drive.stop();
 
         //Stop shooting
         upperShooter.stopShooting();
 
-
         //Stop the shooter
         upperShooter.stopConveyor();
 
-
         //Stop the lower Conveyor
         lowerConveyor.stop();
-
         
         //Stop the ramp motor
         ramp.stop();
@@ -125,6 +158,8 @@ public class inceptusRobot extends IterativeRobot {
         
         //Run the shooter (has camera code also)
         oi.runUpperConvey(upperShooter);
+        
+        oi.runUpperShooter(upperShooter, targetFinder);
         
         //test shoot
         oi.testShoot(upperShooter);
