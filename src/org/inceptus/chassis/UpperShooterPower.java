@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.can.CANTimeoutException;
  *
  * @author innoying
  */
-public class UpperShooter {
+public class UpperShooterPower {
     
     private Jaguar conveyorMotor;
     private Jaguar upperShootingMotor;
@@ -19,7 +19,7 @@ public class UpperShooter {
     
     private double targetSpeed = 0;
     
-    public UpperShooter(){
+    public UpperShooterPower(){
             
             //Setup the Jaguars
             conveyorMotor = new Jaguar(5);
