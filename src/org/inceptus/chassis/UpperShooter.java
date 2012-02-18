@@ -33,7 +33,7 @@ public class UpperShooter {
     }
     
     public void prepareToShoot( double inches ){
-        
+        /*
         //Prebuilt values
         final double maxPower = .5;
         final int maxDistance = 16 * 12;
@@ -46,8 +46,18 @@ public class UpperShooter {
         
         //Assume linear
         double temp = (maxPower - minPower)/(maxDistance - minDistance) * inches;
+        */
         
-        //Catch bad (>.5) case where motors burn out
+        double v = DriverStation.getInstance().getBatteryVoltage();
+        double f = inches / 12;
+        
+        System.out.println("v:"+v);
+        
+        double temp = ((.44*(f)+16-v)/22);
+        
+        System.out.println(temp+"");
+        
+        //Catch bad (>.8) case where motors burn out
         if(temp > .8){
             temp = .8;
         }
@@ -75,21 +85,10 @@ public class UpperShooter {
     
     public void set(){
         
-        //
-        
-        //90 -  3500/3600
-        //80 -  3200/3300
-        //70 -  2800/2900
-        //60 -  2400/2500
-        //50 -  1900/2100
-        //40 -  1400/1600
-        //30 -  0874/1100
-        
-        
         //Go fast
         lowerShootingMotor.set(targetSpeed);
         //Slower to add backspin
-        upperShootingMotor.set(targetSpeed * .95);
+        upperShootingMotor.set(targetSpeed * .9);
                 
     }
     

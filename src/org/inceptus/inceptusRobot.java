@@ -81,19 +81,19 @@ public class inceptusRobot extends IterativeRobot {
     public void autonomousInit() {
         
         //Start the wheels
-        upperShooter.prepareToShoot(176);
+        upperShooter.prepareToShoot(169);
         
         //Run
         upperShooter.set();
         
         //Wait 1 second
-        Timer.delay(1);
+        Timer.delay(3);
         
         //Bring in 1 ball
         lowerConveyor.moveUp();
         
         //Wait 3 seconds
-        Timer.delay(3);
+        Timer.delay(4);
         
         //Stop the lower Conveyor
         lowerConveyor.stop();
@@ -101,14 +101,16 @@ public class inceptusRobot extends IterativeRobot {
         //Push ball into shooter
         upperShooter.moveConveyorWithValue(1);
         
-        //Delay 4 seconds to shoot and then repeat
-        Timer.delay(4);
+        //Delay 3 seconds to shoot and then repeat
+        Timer.delay(3);
         
         //Stop
         upperShooter.stopConveyor();
         
         //Bring in 1 ball
         lowerConveyor.moveUp();
+        
+        Timer.delay(3);
         
         //Push ball into shooter
         upperShooter.moveConveyorWithValue(1);
@@ -162,6 +164,6 @@ public class inceptusRobot extends IterativeRobot {
         oi.runUpperShooter(upperShooter, targetFinder);
         
         //test shoot
-        oi.testShoot(upperShooter);
+        //oi.testShoot(upperShooter);
     }
 }

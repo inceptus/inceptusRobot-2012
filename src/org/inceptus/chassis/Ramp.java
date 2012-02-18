@@ -1,7 +1,7 @@
 package org.inceptus.chassis;
 
-import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Victor;
 
 /**
  *
@@ -49,7 +49,7 @@ public class Ramp {
             rampMotor.set(0);
         }else{
             //Drive down
-            rampMotor.set(-.5);
+            rampMotor.set(-.8);
         }
         
         //Return Success

@@ -65,7 +65,7 @@ public class OI {
     }
    
     public void runUpperShooter(UpperShooter upperShooter, TargetFinder targetFinder){
-        
+        /*
         //Calc buttons from the POV hat
         boolean button1 = (otherJoy.getRawAxis(6) == 1);
         boolean button2 = (otherJoy.getRawAxis(6) == -1);
@@ -93,7 +93,7 @@ public class OI {
         //Reset "lastButton"
         lastButton1 = button1;
         lastButton2 = button2;
-        
+        */
         /*
         //If the process image button is pressed
         if(otherJoy.getRawButton(3)){
@@ -125,23 +125,46 @@ public class OI {
         if(otherJoy.getRawButton(3)){
             
             //30
-            upperShooter.setTest(.3);
+            upperShooter.prepareToShoot(170);
             
-        }
-
-        if(otherJoy.getRawButton(4)){
+            System.out.println("45%");
+            
+        }else if(otherJoy.getRawButton(4)){
             
             //40
-            upperShooter.setTest(.4);
+            upperShooter.prepareToShoot(135);
+            
+            System.out.println("60%");
+            
+        }else if(otherJoy.getRawButton(2)){
+            
+            //50
+            upperShooter.prepareToShoot(100);
+            
+            System.out.println("55%");
+            
+        }else if(otherJoy.getRawButton(5)){
+            
+            //50
+            upperShooter.prepareToShoot(75);
+            
+            System.out.println("55%");
+            
+        }else if(otherJoy.getRawButton(6)){
+            
+            //50
+            upperShooter.prepareToShoot(50);
+            
+            System.out.println("55%");
+            
+        }else{
+            
+            //Stop
+            upperShooter.stopShooting();
             
         }
         
-        if(otherJoy.getRawButton(5)){
-            
-            //50
-            upperShooter.setTest(.5);
-            
-        }
+        upperShooter.set();
         
     }
     
@@ -162,7 +185,7 @@ public class OI {
         
     }
     
-    public void testShoot(UpperShooter upperShooter){
+    /*public void testShoot(UpperShooter upperShooter){
         
         if(otherJoy.getRawButton(2)){
             upperShooter.prepareToShoot(144);
@@ -171,5 +194,5 @@ public class OI {
         }
         
         upperShooter.set();
-    }
+    }*/
 }
