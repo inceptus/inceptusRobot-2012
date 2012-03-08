@@ -1,13 +1,10 @@
 package org.inceptus.OI;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.can.CANTimeoutException;
+import edu.wpi.first.wpilibj.Timer;
 import org.inceptus.camera.Target;
 import org.inceptus.camera.TargetFinder;
-import org.inceptus.chassis.Drive;
-import org.inceptus.chassis.LowerConveyor;
-import org.inceptus.chassis.Ramp;
-import org.inceptus.chassis.UpperShooterEncoder;
+import org.inceptus.chassis.*;
 import org.inceptus.debug.Debug;
 
 
@@ -59,102 +56,47 @@ public class OI {
         
     }
     
-    public void runUpperConvey(UpperShooterEncoder upperShooter){
+    public void runUpperConvey(UpperShooterPower upperShooter){
         
         //If the shoot values are set
         upperShooter.moveConveyorWithValue(otherJoy.getRawAxis(5) * -1);
         
     }
    
-    public void runUpperShooter(UpperShooterEncoder upperShooter, TargetFinder targetFinder) throws CANTimeoutException{
-        /*
+    public void runUpperShooter(UpperShooterPower upperShooter, TargetFinder targetFinder){
+        
         //Calc buttons from the POV hat
         boolean button1 = (otherJoy.getRawAxis(6) == 1);
         boolean button2 = (otherJoy.getRawAxis(6) == -1);
         
         //If changed
         if(button1 != lastButton1){
-            
-            //Adjust offset up
-            upperShooter.adjustOffset(true);
-            
-            Debug.log("bumpDown");
-            
+            if(button1 == true){
+                //Adjust offset up
+                upperShooter.adjustOffset(true);
+
+                Debug.log("bumpDown:"+upperShooter.targetDistance);
+            }   
         }
         
         //If changed
         if(button2 != lastButton2){
-            
-            //Adjust offset down
-            upperShooter.adjustOffset(false);
-            
-            Debug.log("bumpUp");
-            
+            if(button2 == true){
+                //Adjust offset down
+                upperShooter.adjustOffset(false);
+
+                Debug.log("bumpUp:"+upperShooter.targetDistance);
+            }
         }
         
         //Reset "lastButton"
         lastButton1 = button1;
         lastButton2 = button2;
-        */
-        
-        //If the process image button is pressed
-        if(otherJoy.getRawButton(3)){
-            
-            //Get a new image
-            Target highTarget = targetFinder.processImage();
-            
-            //Prepare the wheels to shoot at camera distance
-            upperShooter.prepareToShoot( highTarget.distance, 4 );
-            
-            //Log
-            System.out.println( "Distance:" + highTarget.distance );
-        }
-        
-        //If the ramp up button is pressed
-        if(otherJoy.getRawButton(4)){
-            
-            //Set the motor powers
-            upperShooter.set();
-            
-        }else{
-            
-            //Stop the motor
-            upperShooter.stopShooting();
-            
-        }
         
         if(otherJoy.getRawButton(3)){
             
-            //30
-            upperShooter.prepareToShoot( 170, 4 );
-            
-            System.out.println("45%");
-            
-        }else if(otherJoy.getRawButton(4)){
-            
-            //40
-            upperShooter.prepareToShoot( 135, 4 );
-            
-            System.out.println("60%");
-            
-        }else if(otherJoy.getRawButton(2)){
-            
             //50
-            upperShooter.prepareToShoot( 100, 4 );
-            
-            System.out.println("55%");
-            
-        }else if(otherJoy.getRawButton(5)){
-            
-            //50
-            upperShooter.prepareToShoot( 75, 4 );
-            
-            System.out.println("55%");
-            
-        }else if(otherJoy.getRawButton(6)){
-            
-            //50
-            upperShooter.prepareToShoot( 50, 4 );
+            upperShooter.prepareToShoot();
             
             System.out.println("55%");
             
@@ -167,6 +109,38 @@ public class OI {
         
         upperShooter.set();
         
+    }
+    
+    public void alignTowardTarget(Drive drive, TargetFinder targetFinder) {
+        
+        if(otherJoy.getRawButton(6)){
+
+             Target highTarget = targetFinder.processImage();
+            
+            //Center the robot onto the target
+            if (highTarget.boxCenterX < 160) {
+
+                drive.driveWithValues(0, 0, .2);
+
+                Timer.delay(.1);
+
+                drive.stop();
+
+            } else {
+
+                drive.driveWithValues(0, 0, -.2);
+
+                Timer.delay(.1);
+
+                drive.stop();
+
+            }
+            
+        }else{
+            
+            drive.stop();
+            
+        }
     }
     
     public void moveLowerConveyor(LowerConveyor lowerConveyor){

@@ -17,6 +17,8 @@ public class UpperShooterPower {
     
     private double offset = 0;
     
+    public double targetDistance = 200;
+    
     private double targetSpeed = 0;
     
     public UpperShooterPower(){
@@ -32,7 +34,7 @@ public class UpperShooterPower {
             
     }
     
-    public void prepareToShoot( double inches ){
+    public void prepareToShoot(){
         /*
         //Prebuilt values
         final double maxPower = .5;
@@ -48,14 +50,16 @@ public class UpperShooterPower {
         double temp = (maxPower - minPower)/(maxDistance - minDistance) * inches;
         */
         
+        DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser4, 1, "Power:"+targetDistance);
+        
+        DriverStationLCD.getInstance().updateLCD();
+        
         double v = DriverStation.getInstance().getBatteryVoltage();
-        double f = inches / 12;
+        double f = targetDistance / 12;
         
         System.out.println("v:"+v);
         
         double temp = ((.44*(f)+16-v)/22);
-        
-        System.out.println(temp+"");
         
         //Catch bad (>.8) case where motors burn out
         if(temp > .8){
@@ -80,6 +84,9 @@ public class UpperShooterPower {
     }
     
     public void setTest( double speed ){
+        
+        
+        
         targetSpeed = speed;
     }
     
@@ -88,7 +95,7 @@ public class UpperShooterPower {
         //Go fast
         lowerShootingMotor.set(targetSpeed);
         //Slower to add backspin
-        upperShootingMotor.set(targetSpeed * .9);
+        upperShootingMotor.set(targetSpeed * .7);
                 
     }
     
@@ -117,9 +124,9 @@ public class UpperShooterPower {
     public void adjustOffset(boolean direction){
         
         if(direction){
-            offset -= .01;
+            targetDistance -= 3;
         }else{
-            offset += .01;
+            targetDistance += 3;
         };
         
     }

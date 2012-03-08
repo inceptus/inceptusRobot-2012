@@ -49,7 +49,7 @@ public class Ramp {
             rampMotor.set(0);
         }else{
             //Drive down
-            rampMotor.set(-.8);
+            rampMotor.set(-.6);
         }
         
         //Return Success

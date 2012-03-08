@@ -35,7 +35,7 @@ public class inceptusRobot extends IterativeRobot {
     private LowerConveyor lowerConveyor;
     
     //Global lowerConveyor class
-    private UpperShooterEncoder upperShooter;
+    private UpperShooterPower upperShooter;
    
     //Global camera class
     private TargetFinder targetFinder;
@@ -63,18 +63,9 @@ public class inceptusRobot extends IterativeRobot {
             
         //Get the ramp class
         lowerConveyor = new LowerConveyor();
-        
-        try {
             
-            //Get the upper shooter class
-            upperShooter = new UpperShooterEncoder();
-            
-        } catch (CANTimeoutException ex) {
-            
-            //Print error
-            Debug.fatal(ex);
-            
-        }
+        //Get the upper shooter class
+        upperShooter = new UpperShooterPower();
 
         //Get the OI class
         oi = new OI();
@@ -86,85 +77,73 @@ public class inceptusRobot extends IterativeRobot {
      */
     public void autonomousInit() {
         
-        try {
-            
-            //Start the wheels to shoot at 12 feet on top hoop
-            upperShooter.prepareToShoot(144, 4);
-            
-            //Run
-            upperShooter.set();
-            
-            //Bring in 1 ball to upper conveyor
-            lowerConveyor.moveUp();
-            
-            //Wait 2 seconds
-            Timer.delay(2);
-            
-            //Stop the lower Conveyor
-            lowerConveyor.stop();
-            
-            //Wait for wheel to get to full speed
-            Timer.delay(2);
-            
-            //Push ball into shooter
-            upperShooter.moveConveyorUp();
-            
-            //Start next ball
-            lowerConveyor.moveUp();
-            
-            //Delay 3 seconds to shoot
-            Timer.delay(3);
-            
-            //Stop
-            upperShooter.stopConveyor();
-            
-            //Wait for wheels to get back to speed
-            Timer.delay(4);
-            
-            //Push ball into shooter
-            upperShooter.moveConveyorUp();
-            
-            //Delay 3 seconds to shoot
-            Timer.delay(3);
-            
-            //Stop shooting and conveyors
-            upperShooter.stopConveyor();
-            upperShooter.stopShooting();
-            lowerConveyor.stop();
-            
-        } catch (CANTimeoutException ex) {
-            
-            Debug.fatal(ex);
-            
-        }
+        System.out.println("D:"+targetFinder.processImage().distance);
         
+        
+        
+           /* 
+        //Start the wheels to shoot at 12 feet on top hoop
+        upperShooter.prepareToShoot(144, 4);
+
+        //Run
+        upperShooter.set();
+
+        //Bring in 1 ball to upper conveyor
+        lowerConveyor.moveUp();
+
+        //Wait 2 seconds
+        Timer.delay(2);
+
+        //Stop the lower Conveyor
+        lowerConveyor.stop();
+
+        //Wait for wheel to get to full speed
+        Timer.delay(2);
+
+        //Push ball into shooter
+        upperShooter.moveConveyorUp();
+
+        //Start next ball
+        lowerConveyor.moveUp();
+
+        //Delay 3 seconds to shoot
+        Timer.delay(3);
+
+        //Stop
+        upperShooter.stopConveyor();
+
+        //Wait for wheels to get back to speed
+        Timer.delay(4);
+
+        //Push ball into shooter
+        upperShooter.moveConveyorUp();
+
+        //Delay 3 seconds to shoot
+        Timer.delay(3);
+
+        //Stop shooting and conveyors
+        upperShooter.stopConveyor();
+        upperShooter.stopShooting();
+        lowerConveyor.stop();
+*/
     }
     
     public void disabledInit(){
         
-        try {
-            
-            //Stop the drive
-            drive.stop();
+        //Stop the drive
+        drive.stop();
 
-            //Stop shooting
-            upperShooter.stopShooting();
+        //Stop shooting
+        upperShooter.stopShooting();
 
-            //Stop the shooter
-            upperShooter.stopConveyor();
+        //Stop the shooter
+        upperShooter.stopConveyor();
 
-            //Stop the lower Conveyor
-            lowerConveyor.stop();
-            
-            //Stop the ramp motor
-            ramp.stop();
-            
-        } catch (CANTimeoutException ex) {
-            
-            //Log
-            Debug.fatal(ex);
-            
-        }
+        //Stop the lower Conveyor
+        lowerConveyor.stop();
+
+        //Stop the ramp motor
+        ramp.stop();
         
     }
     
@@ -184,16 +163,11 @@ public class inceptusRobot extends IterativeRobot {
         
         //Run the shooter (has camera code also)
         oi.runUpperConvey(upperShooter);
+            
+        //Run the upperShooter
+        oi.runUpperShooter(upperShooter, targetFinder);
         
-        try {
-            
-            oi.runUpperShooter(upperShooter, targetFinder);
-            
-        } catch (CANTimeoutException ex) {
-            
-            //Log
-            Debug.fatal(ex);
-            
-        }
+        //Align
+        //oi.alignTowardTarget(drive, targetFinder);
     }
 }

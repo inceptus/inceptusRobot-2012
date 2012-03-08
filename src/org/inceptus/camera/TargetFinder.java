@@ -56,7 +56,6 @@ public class TargetFinder {
     private Target target2 = Target.NullTarget;
     private Target target3 = Target.NullTarget;
     private Target target4 = Target.NullTarget;
-    
     //Box and inertia criteria
     private CriteriaCollection boxCriteria;
     private CriteriaCollection inertiaCriteria;
@@ -146,7 +145,6 @@ public class TargetFinder {
                 ParticleAnalysisReport[] xparticles = filteredBoxIm.getOrderedParticleAnalysisReports();
                 //Log results
                 Debug.log(xparticles.length + " particles at " + Timer.getFPGATimestamp());
-                
                 //Run another particle filer using intertia criteria
                 BinaryImage filteredInertiaIm = filteredBoxIm.particleFilter(inertiaCriteria);
                 //Order the particle analysis
@@ -184,11 +182,11 @@ public class TargetFinder {
                     }
                     //Log
                     Debug.log("Target " + i + ": (" + t.boxCenterX + "," + t.boxCenterY + ") Distance: " + t.distance);
+                    Debug.log("Target " + i + ": (" + t.centerMassX + "," + t.centerMassY + ") Abram Determined Distance: " + t.actualDistance);
                 }
                 //Log
                 Debug.log("Best target: " + highTarget.index);
                 Debug.log("Distance to the target: " + highTarget.distance);
-                
                 //Free images from memory.
                 im.free();
                 thresholdIm.free();

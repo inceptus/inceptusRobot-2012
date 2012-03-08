@@ -47,7 +47,7 @@ public class Drive {
     public void driveWithValues(double x, double y, double rotation){
 
         //Drive using values
-        robotDrive.mecanumDrive_Cartesian(x, -y, -rotation, 0);
+        robotDrive.mecanumDrive_Cartesian(-x, -y, -rotation, 0);
             
     }
     

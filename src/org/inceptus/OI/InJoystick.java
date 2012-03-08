@@ -9,8 +9,8 @@ import edu.wpi.first.wpilibj.Joystick;
 public class InJoystick extends Joystick{
     
     //Throttle min and max values
-    private static final double limitMax = .7;
-    private static final double limitMin = .3;
+    private static final double limitMax = .8;
+    private static final double limitMin = .2;
     
     //The scale for twisting values
     private static final double twistScale = .4;
@@ -23,11 +23,14 @@ public class InJoystick extends Joystick{
 
     public double getScaledThrottle(){
         //Get raw throttle ( -1 - 1 )
-        double T = this.getRawAxis(4);
+        double T = this.getRawAxis(3) * -1;
+        
         //Add 1 to make value 0-2 then scale back to 0-1
         T = ( ( T + 1 ) / 2 );
+        
         //Scale value between high and low limits
         T = limitMin + ( T * (limitMax - limitMin) );
+        
         //Return the scaled value
         return T;
     }
